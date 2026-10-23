@@ -10,8 +10,8 @@ export const VERSION = '0.1.4';
 const MAX = 100000;
 export const TOOL = {
   name: 'scan_text', title: 'Scan text for prompt injection',
-  description: "Check text your agent is about to read (a web page, email, document, tool result or another agent's message) for prompt injection before acting on it. Returns risk_score 0-100, verdict (safe | suspicious | malicious), categories and the exact matching spans. Runs locally, up to 100,000 characters.",
-  inputSchema: { type: 'object', properties: { text: { type: 'string', description: 'Text to scan (up to 100,000 characters)' } }, required: ['text'] },
+  description: "Scans untrusted text for prompt injection before your agent reads or acts on it: web page text, emails, documents, tool results or another agent's message. A deterministic rule engine flags instruction overrides, jailbreak personas, system-prompt extraction, fake delimiters, exfiltration URLs, tool hijacking, hidden Unicode and encoded payloads. Free and local: no key, no network, nothing leaves your machine; up to 100,000 characters per call (split longer text). This server scans text only; to fetch and scan a URL (incl. hidden HTML) or check MCP tool definitions for poisoning, use scan_url / scan_tools on the hosted remote MCP https://api.youraitools.co/injectscan/mcp (free daily tier, then x402). Returns risk_score (0-100), verdict (safe | suspicious | malicious), flagged, categories[] {category, score, description}, findings[] {rule, category, start, end, text}, hidden-character counts and chars_scanned. Read-only safety signal, not a guarantee.",
+  inputSchema: { type: 'object', properties: { text: { type: 'string', description: 'The untrusted text to scan, as one plain string (1-100,000 characters; longer input returns a bad_request error). Pass the content exactly as your agent would read it; offsets in findings refer to this string.' } }, required: ['text'] },
   annotations: { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
 };
 const PROTOCOLS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'];
